@@ -19,5 +19,13 @@ def signup():
 def student():
     return render_template('studentHome.html')
 
+@app.route('/signup.html')
+def signup():
+    return render_template('signup.html')
+
+@app.route('/home.html')
+def student():
+    return render_template('studentHome.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
