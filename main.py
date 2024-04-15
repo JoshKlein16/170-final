@@ -11,13 +11,23 @@ conn = engine.connect()
 def start():
     return render_template('index.html')
 
-@app.route('/signup.html')
+@app.route('/createA.html')
 def signup():
-    return render_template('signup.html')
+    return render_template('createA.html')
+
+@app.route('/createA.html', methods=["GET"])
+def signupT():
+    return render_template("createA.html")
+
+@app.route('/createA.html', methods=["POST"])
+def createArequest():
+    conn.execute(text("INSERT INTO request_Cuser (First_Name, Last_Name, Email, Password, Phone_Number, SSN) VALUES (:fName, :lName, :email, :password, :phone, :ssn)"),  request.form)
+    conn.commit()
+    return render_template("index.html")
 
 @app.route('/home.html')
 def student():
-    return render_template('studentHome.html')
+    return render_template('index.html')
 
 @app.route('/signup.html')
 def signup():
