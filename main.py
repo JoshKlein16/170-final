@@ -29,18 +29,6 @@ def createArequest():
 def student():
     return render_template('index.html')
 
-@app.route('/signup.html')
-def signup():
-    return render_template('signup.html')
-
-@app.route('/home.html')
-def student():
-    return render_template('studentHome.html')
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
-
 @app.route('/bankerlogin.html', methods=["GET"])
 def loginS():
     return render_template('bankerlogin.html')
@@ -67,3 +55,148 @@ def accountsS():
     CuserData = conn.execute(query)
 
     return render_template('pendingAccounts.html', CuserData=CuserData)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
