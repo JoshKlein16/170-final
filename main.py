@@ -31,3 +31,31 @@ def student():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+@app.route('/bankerlogin.html', methods=["GET"])
+def loginS():
+    return render_template('bankerlogin.html')
+
+@app.route('/bankerlogin.html', methods=["POST"])
+def loginSGo():
+    email = request.form['Email']
+    password = request.form['Password']
+    query = text("SELECT bank_account_id FROM banker WHERE Email = :email AND Password = :password")
+    user = conn.execute(query, {'email': email, 'password': password}).fetchone()
+    if user:
+        global BankID
+        BankID = user[0]
+        query = text("SELECT First_Name FROM banker WHERE bank_account_id = :bank_account_id")
+        name = conn.execute(query, {'BankID' : BankID}).fetchone()
+        return render_template('bankerlogin.html', name=name[0])
+    else:
+        return render_template('bankerlogin.html')
+    
+    
+@app.route('/pendingAccounts.html')
+def accountsS():
+    query = text("SELECT Cuser_ID, First_Name, Last_Name, Email FROM request_Cuser")
+    CuserData = conn.execute(query)
+
+    return render_template('pendingAccounts.html', CuserData=CuserData)
