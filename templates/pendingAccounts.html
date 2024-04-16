@@ -14,20 +14,34 @@
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
+                <th>Password</th>
+                <th>Phone Number</th>
+                <th>SSN</th>
+                <th>Accept Account</th>
+                <th>Deny Account</th>
+
             </tr>
         </thead>
         <tbody>
             {% for row in CuserData %}
                 <tr>
+                <form>
                     <td>{{ row[0] }}</td>
                     <td>{{ row[1] }}</td>
                     <td>{{ row[2] }}</td>
                     <td>{{ row[3] }}</td>
                     <td>{{ row[4] }}</td>
+                    <td>{{ row[5] }}</td>
+                    <td>{{ row[6] }}</td>
+                    <input type="hidden" name="Cuser_ID" value="{{ row[0] }}">
+                    <td><input type="radio" id="accept" name="choice"></td>
+                    <td><input type="radio" id="deny" name="choice"></td>
+                    <td><input type="submit" value="Update Account"  onclick="alert('Account Updated!')"></td>
+                </form>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
     {% endblock %}
 </body>
-</html>s
+</html>
