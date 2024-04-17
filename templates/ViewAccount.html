@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/style.css">
-
     <title>Document</title>
 </head>
 <body>
@@ -12,7 +10,7 @@
     <table>
         <thead>
             <tr>
-                <th>Account ID</th>
+                <th>Bank Account ID:</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
@@ -23,7 +21,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for row in CuserData %}
+            {% for row in AccountData %}
                 <tr>
                     <td>{{ row[0] }}</td>
                     <td>{{ row[1] }}</td>
