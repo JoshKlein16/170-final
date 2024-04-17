@@ -29,13 +29,95 @@ def createArequest():
 def student():
     return render_template('index.html')
 
-@app.route('/signup.html')
-def signup():
-    return render_template('signup.html')
 
-@app.route('/home.html')
-def student():
-    return render_template('studentHome.html')
+
+@app.route('/pendingAccounts.html')
+def accounts():
+    query = text("SELECT Cuser_ID, First_Name, Last_Name, Email, Phone_Number, SSN FROM request_Cuser")
+    CuserData = conn.execute(query)
+
+    return render_template('pendingAccounts.html', CuserData=CuserData)
+
+
+
+
+@app.route('/bankerlogin.html', methods=["GET"])
+def loginS():
+    return render_template('bankerlogin.html')
+
+@app.route('/bankerlogin.html', methods=["POST"])
+def loginSGo():
+    email = request.form['Email']
+    password = request.form['Password']
+    query = text("SELECT Cuser_ID FROM banker WHERE Email = :email AND Password = :password")
+    user = conn.execute(query, {'email': email, 'password': password}).fetchone()
+    if user:
+        global BankID
+        BankID = user[0]
+        query = text("SELECT First_Name FROM banker WHERE Cuser_ID = :Cuser_ID")
+        name = conn.execute(query, {'Cuser_ID' : BankID}).fetchone()
+        return render_template('adminpanel.html', name=name[0])
+    else:
+        return render_template('bankerlogin.html')
+    
+@app.route('/login.html', methods=["GET"])
+def login():
+    return render_template('login.html')
+
+@app.route('/login.html', methods=["POST"])
+def loginGo():
+    email = request.form['Email']
+    password = request.form['Password']
+    query = text("SELECT Cuser_ID FROM Cuser WHERE Email = :email AND Password = :password")
+    user = conn.execute(query, {'email': email, 'password': password}).fetchone()
+    if user:
+        global BankID
+        BankID = user[0]
+        query = text("SELECT First_Name FROM banker WHERE Cuser_ID = :Cuser_ID")
+        name = conn.execute(query, {'Cuser_ID': BankID}).fetchone()
+        if name:
+            return render_template('home.html', name=name[0])
+        else:
+            # Handle case where name is None
+            return render_template('index.html', name="Unknown")
+    else:
+        return render_template('index.html')
+
+
+@app.route('/ViewAccount.html')
+def ViewAccounts():
+    query = text("SELECT Cuser_ID, First_Name, Last_Name, Email, Phone_Number, SSN FROM request_Cuser")
+    AccountData = conn.execute(query)
+
+    return render_template('ViewAccount.html', AccountData=AccountData)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,15 @@
+#rightpanel {
+    background-color: red;
+    float: right;
+    width: 400px;
+    height: 100%;
+}
+
+table th{
+    border: 1px solid black;
+}
+table td{
+    border: 1px solid black;
+    width: 100%;
+
+}
