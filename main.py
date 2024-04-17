@@ -29,25 +29,7 @@ def createArequest():
 def student():
     return render_template('index.html')
 
-@app.route('/bankerlogin.html', methods=["GET"])
-def loginS():
-    return render_template('bankerlogin.html')
 
-@app.route('/bankerlogin.html', methods=["POST"])
-def loginSGo():
-    email = request.form['Email']
-    password = request.form['Password']
-    query = text("SELECT bank_account_id FROM banker WHERE Email = :email AND Password = :password")
-    user = conn.execute(query, {'email': email, 'password': password}).fetchone()
-    if user:
-        global BankID
-        BankID = user[0]
-        query = text("SELECT First_Name FROM banker WHERE bank_account_id = :bank_account_id")
-        name = conn.execute(query, {'BankID' : BankID}).fetchone()
-        return render_template('bankerlogin.html', name=name[0])
-    else:
-        return render_template('bankerlogin.html')
-    
 
 @app.route('/pendingAccounts.html')
 def accounts():
@@ -57,14 +39,27 @@ def accounts():
     return render_template('pendingAccounts.html', CuserData=CuserData)
 
 
-@app.route('/pendingAccounts.html', methods=["POST"])
-def transfer():
-    choice = request.form.get("choice")
-    if choice == "accept":
-        conn.execute(text("INSERT INTO Cuser (Cuser_ID, First_Name, Last_Name, Email, Password, Phone_Number, SSN) VALUES (:Cuser_ID, :fName, :lName, :email, :password, :Phone_Number, :ssn)"), request.form)
-        conn.commit()
-    return render_template("index.html")
 
+
+@app.route('/bankerlogin.html', methods=["GET"])
+def loginS():
+    return render_template('bankerlogin.html')
+
+@app.route('/bankerlogin.html', methods=["POST"])
+def loginSGo():
+    email = request.form['Email']
+    password = request.form['Password']
+    query = text("SELECT Cuser_ID FROM banker WHERE Email = :email AND Password = :password")
+    user = conn.execute(query, {'email': email, 'password': password}).fetchone()
+    if user:
+        global BankID
+        BankID = user[0]
+        query = text("SELECT First_Name FROM banker WHERE Cuser_ID = :Cuser_ID")
+        name = conn.execute(query, {'Cuser_ID' : BankID}).fetchone()
+        return render_template('adminpanel.html', name=name[0])
+    else:
+        return render_template('bankerlogin.html')
+    
 @app.route('/login.html', methods=["GET"])
 def login():
     return render_template('login.html')
@@ -78,15 +73,23 @@ def loginGo():
     if user:
         global BankID
         BankID = user[0]
-        query = text("SELECT First_Name FROM Cuser WHERE Cuser_ID = :Cuser_ID")
-        name = conn.execute(query, {'BankID' : BankID}).fetchone()
-        return render_template('bankerlogin.html', name=name[0])
+        query = text("SELECT First_Name FROM banker WHERE Cuser_ID = :Cuser_ID")
+        name = conn.execute(query, {'Cuser_ID': BankID}).fetchone()
+        if name:
+            return render_template('home.html', name=name[0])
+        else:
+            # Handle case where name is None
+            return render_template('index.html', name="Unknown")
     else:
-        return render_template('login.html')
-  
+        return render_template('index.html')
 
 
+@app.route('/ViewAccount.html')
+def ViewAccounts():
+    query = text("SELECT Cuser_ID, First_Name, Last_Name, Email, Phone_Number, SSN FROM request_Cuser")
+    AccountData = conn.execute(query)
 
+    return render_template('ViewAccount.html', AccountData=AccountData)
 
 
 
