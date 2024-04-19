@@ -1,90 +1,16 @@
-.barItem{
-    display: inline-block;
-  }
-  
-  header li {
-    float: left;
-    display: block;
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-  
-  .topBar{
-    background-color: #348998;
-    display:flex;
-    justify-content: space-between;
-    align-items:center;
-    padding: 10px;
-    border-bottom: 2px solid black;
-  }
-  
-  .formSection {
-    padding: 10px;
-    right: 0;
-  }
-  
-  .input, .barItem input{
-    height: 35px;
-    border: 2px solid black;
-    border-radius: 5px;
-    margin-left: 10px;
-    background-color: lightgray;
-  }
-  
-  .barItem li a{
-    color: white;
-  }
-  
-  .barImage{
-    height: 50px;
-    border: 2px solid black;
-    border-radius: 20px;
-    border-style: outset;
-  }
-  
-  .mainDiv {
-    margin: auto;
-    width: 30%;
-  }
-  
-  h1{
-    text-align: center;
-  }
-  
-  header a{
-    text-decoration:none;
-    color:black;
-  }
-  
-  
-  *, *:before, *:after {
-    box-sizing: border-box;
-  }
-  
-  html {
-    font-size: 100%;
-  }
-  
-  body {
-    font-family: acumin-pro, system-ui, sans-serif;
-    margin: 0;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    font-size: 14px;
-    background-color: #f4f4f4;
-    align-items: start;
-    min-height: 100vh;
-  }
-  
-  .footer {
-    display: flex;
-    flex-flow: row wrap;
-    padding: 30px 30px 20px 30px;
-    color: #2f2f2f;
-    background-color: #348998;
-    border-top: 2px solid black;
-  }
-  
-  .footer p{
-    color: white;
-  }
+
+#rightpanel {
+    background-color: red;
+    float: right;
+    width: 400px;
+    height: 100%;
+}
+
+table th{
+    border: 1px solid black;
+}
+table td{
+    border: 1px solid black;
+    width: 100%;
+
+}

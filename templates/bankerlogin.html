@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,8 +6,10 @@
     <title>Document</title>
 </head>
 <body>
-    {% block body %}
-    <form action="/login.html" method="POST">
+
+{% block body %}
+
+    <form action="/bankerlogin.html" method="POST">
         <input type="text" name="Email" placeholder="E-mail" required>
         <input type="password" name="Password" placeholder="Password" required>
         <input type="submit" value="LOGIN">
@@ -16,4 +17,3 @@
 {% endblock %}
 </body>
 </html>
-
