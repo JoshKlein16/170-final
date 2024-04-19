@@ -20,11 +20,12 @@
                 <th>Checkings:</th>
                 
                 <th id="rightpanel">SSN</th>
+
             </tr>
         </thead>
         <tbody>
             {% for row in AccountData %}
-            <tr>
+                <tr>
                 <td>{{ AccountData[0] }}</td>
                 <td>{{ AccountData[1] }}</td>
                 <td>{{ AccountData[2] }}</td>
@@ -33,8 +34,9 @@
                 <td>{{ AccountData[5] }}</td>
                 <td>{{ AccountData[6] }}</td>
                 <td>{{ AccountData[7] }}</td>
-            </tr>
-            
+                    <td><button onclick="window.location.href='add_money.html'">Add Money</button>
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
