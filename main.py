@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from sqlalchemy import create_engine, text
+from decimal import Decimal
 
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 conn_str = "mysql://root:jedi4890@localhost/manage_banking"
 engine = create_engine(conn_str, echo=True)
@@ -71,19 +73,10 @@ def loginGo():
     query = text("SELECT Cuser_ID FROM Cuser WHERE Email = :email AND Password = :password")
     user = conn.execute(query, {'email': email, 'password': password}).fetchone()
     if user:
-        global BankID
-        BankID = user[0]
-        query = text("SELECT First_Name FROM Cuser WHERE Cuser_ID = :Cuser_ID")
-        name = conn.execute(query, {'Cuser_ID': BankID}).fetchone()
-        # GetInfo = text("SELECT First_Name, Last_Name, Email, Password, Phone_Number, SSN, checking FROM banker WHERE Cuser_ID = :Cuser_ID")
-        # accountInfo = conn.execute(GetInfo, {'Cuser_ID': BankID}).fetchone()
-        if name:
-            return render_template('home.html', name=name[0])
-        else:
-            return render_template('home.html', name="WHO DF ARE YOU")
+        session['user_id'] = user[0]
+        return render_template('home.html')
     else:
         return render_template('index.html')
-    
 
 @app.route('/ViewAccount.html')
 def ViewAccount():
@@ -98,35 +91,85 @@ def transfer():
 
 @app.route('/transfer', methods=["POST"])
 def transfer_money():
+    if 'user_id' not in session:
+        return "User not logged in"
+    
+    sender_account_id = session['user_id']
     recipient_account_id = request.form['recipient_account_id']
-    amount = float(request.form['amount'])
+    amount = Decimal(request.form['amount'])
 
-    recipient_query = text("SELECT * FROM users WHERE bank_account_id = :recipient_account_id")
-    recipient = conn.execute(recipient_query, {'recipient_account_id': recipient_account_id}).fetchone()
+    try:
+        recipient_query = text("SELECT * FROM users WHERE bank_account_id = :recipient_account_id")
+        recipient = conn.execute(recipient_query, {'recipient_account_id': recipient_account_id}).fetchone()
 
-    if recipient:
-        global BankID
-        BankID = recipient[0]
-        user_query = text("SELECT balance FROM users WHERE bank_account_id = :user_account_id")
-        user_balance = conn.execute(user_query, {'user_account_id': BankID}).fetchone()[0]
+        if recipient:
+            user_query = text("SELECT balance FROM users WHERE bank_account_id = :user_account_id")
+            user_balance = Decimal(conn.execute(user_query, {'user_account_id': sender_account_id}).fetchone()[0])
 
-        if user_balance >= amount:
-            new_user_balance = user_balance - amount
+            if user_balance >= amount:
+                new_user_balance = user_balance - amount
+                update_user_query = text("UPDATE users SET balance = :new_balance WHERE bank_account_id = :user_account_id")
+                conn.execute(update_user_query, {'new_balance': new_user_balance, 'user_account_id': sender_account_id})
 
-            update_user_query = text("UPDATE users SET balance = :new_balance WHERE bank_account_id = :user_account_id")
-            conn.execute(update_user_query, {'new_balance': new_user_balance, 'user_account_id': BankID})
+                new_recipient_balance = recipient[1] + amount
+                update_recipient_query = text("UPDATE users SET balance = :new_balance WHERE bank_account_id = :recipient_account_id")
+                conn.execute(update_recipient_query, {'new_balance': new_recipient_balance, 'recipient_account_id': recipient_account_id})
 
-            new_recipient_balance = recipient[1] + amount
+                conn.commit()
 
-            update_recipient_query = text("UPDATE users SET balance = :new_balance WHERE bank_account_id = :recipient_account_id")
-            conn.execute(update_recipient_query, {'new_balance': new_recipient_balance, 'recipient_account_id': recipient_account_id})
-
-            return "Money transferred successfully."
+                return "Money transferred successfully."
+            else:
+                return "Insufficient balance."
         else:
-            return "Insufficient balance."
-    else:
-        return "Recipient account not found."
+            return "Recipient account not found."
+    except Exception as e:
+        print("Error:", e)
+        return "An error occurred while transferring money."
+    
+@app.route('/add_money.html', methods=["GET"])
+def add():
+    return render_template('add_money.html')
+    
+@app.route('/add_money.html', methods=["POST"])
+def add_money():
+    user_id = session.get('user_id')
+    amount = Decimal(request.form['amount'])
+    transaction_type = request.form['transaction_type']
 
+    try:
+        user_query = text("SELECT * FROM users WHERE bank_account_id = :user_id")
+        user = conn.execute(user_query, {'user_id': user_id}).fetchone()
 
+        if user:
+            if transaction_type == 'credit':
+                new_balance = user[1] + amount
+            elif transaction_type == 'debit':
+                new_balance = user[1] - amount
+                if new_balance < 0:
+                    return "Insufficient balance for debit transaction."
+            else:
+                return "Invalid transaction type."
+
+            print("Old balance:", user[1])
+            print("Amount:", amount)
+            print("New balance:", new_balance)
+
+            # Update balance in the database
+            update_query = text("UPDATE users SET balance = :new_balance WHERE bank_account_id = :user_id")
+            conn.execute(update_query, {'new_balance': new_balance, 'user_id': user_id})
+
+            # Commit the transaction
+            conn.commit()
+
+            updated_user = conn.execute(user_query, {'user_id': user_id}).fetchone()
+            print("Updated balance in the database:", updated_user[1])
+
+            return "Transaction successful."
+        else:
+            return "User not found."
+    except Exception as e:
+        # Log any errors
+        print("Error:", e)
+        return "An error occurred. Please try again later."
 if __name__ == '__main__':
     app.run(debug=True)
