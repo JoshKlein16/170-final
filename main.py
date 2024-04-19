@@ -76,8 +76,6 @@ def loginGo():
         BankID = user[0]
         query = text("SELECT First_Name FROM Cuser WHERE Cuser_ID = :Cuser_ID")
         name = conn.execute(query, {'Cuser_ID': BankID}).fetchone()
-        # GetInfo = text("SELECT First_Name, Last_Name, Email, Password, Phone_Number, SSN, checking FROM banker WHERE Cuser_ID = :Cuser_ID")
-        # accountInfo = conn.execute(GetInfo, {'Cuser_ID': BankID}).fetchone()
         if name:
             return render_template('home.html', name=name[0])
         else:
@@ -93,7 +91,7 @@ def ViewAccount():
 
     return render_template('ViewAccount.html', AccountData=accountInfo)
 
-@app.route('/add-money', methods=['POST'])
+@app.route('/add_money.html', methods=['POST'])
 def add_money():
     card_number = request.form['cardNumber']
     expiration_date = request.form['expirationDate']
@@ -105,7 +103,7 @@ def add_money():
         result = connection.execute(text("""UPDATE users SET balance = balance + :amount WHERE card_number = :card_number"""), {'amount': amount, 'card_number': card_number})
 
     if result.rowcount > 0:
-        return render_template('add_money.html', success=True)
+        return render_template('home.html', success=True)
 
     return render_template('add_money.html', success=False)
 
