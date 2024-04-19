@@ -3,7 +3,7 @@ from sqlalchemy import create_engine, text
 
 app = Flask(__name__)
 
-conn_str = "mysql://root:CSET@localhost/manage_banking"
+conn_str = "mysql://root:Savier010523$@localhost/manage_banking"
 engine = create_engine(conn_str, echo=True)
 conn = engine.connect()
 
@@ -55,7 +55,7 @@ def loginSGo():
         global BankID
         BankID = user[0]
         query = text("SELECT First_Name FROM banker WHERE Cuser_ID = :Cuser_ID")
-        name = conn.execute(query, {'Cuser_ID' : BankID}).fetchone()
+        name = conn.execute(query, {'Cuser_ID' : BankID}).fetchall()
         return render_template('adminpanel.html', name=name[0])
     else:
         return render_template('bankerlogin.html')
@@ -90,6 +90,22 @@ def ViewAccounts():
     AccountData = conn.execute(query)
 
     return render_template('ViewAccount.html', AccountData=AccountData)
+
+@app.route('/add-money', methods=['POST'])
+def add_money():
+    card_number = request.form['cardNumber']
+    expiration_date = request.form['expirationDate']
+    cvv = request.form['cvv']
+    amount = request.form['amount']
+
+
+    with engine.connect() as connection:
+        result = connection.execute(text("""UPDATE users SET balance = balance + :amount WHERE card_number = :card_number"""), {'amount': amount, 'card_number': card_number})
+
+    if result.rowcount > 0:
+        return render_template('add_money.html', success=True)
+
+    return render_template('add_money.html', success=False)
 
 
 
