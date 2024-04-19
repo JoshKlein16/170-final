@@ -37,6 +37,10 @@
             {% endfor %}
         </tbody>
     </table>
+    <form action="/pendingAccounts.html" method="POST">
+        <label for="ssnverification">Enter SSN:</label>
+        <input type="text" name="ssnverification" placeholder="SSN" required>
+        <input type="submit" value="acceptA">
     {% endblock %}
 </body>
 </html>

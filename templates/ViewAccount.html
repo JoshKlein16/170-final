@@ -17,6 +17,8 @@
                 <th>Password</th>
                 <th>Phone Number</th>
                 <th>SSN</th>
+                <th>Checkings:</th>
+                
                 <th id="rightpanel">SSN</th>
 
             </tr>
@@ -24,14 +26,14 @@
         <tbody>
             {% for row in AccountData %}
                 <tr>
-                    <td>{{ row[0] }}</td>
-                    <td>{{ row[1] }}</td>
-                    <td>{{ row[2] }}</td>
-                    <td>{{ row[3] }}</td>
-                    <td>{{ row[4] }}</td>
-                    <td>{{ row[5] }}</td>
-                    <td>{{ row[6] }}</td>
-                    <td>{{ row 7=""></row> }}</td>
+                <td>{{ AccountData[0] }}</td>
+                <td>{{ AccountData[1] }}</td>
+                <td>{{ AccountData[2] }}</td>
+                <td>{{ AccountData[3] }}</td>
+                <td>{{ AccountData[4] }}</td>
+                <td>{{ AccountData[5] }}</td>
+                <td>{{ AccountData[6] }}</td>
+                <td>{{ AccountData[7] }}</td>
                     <td><button onclick="window.location.href='add_money.html'">Add Money</button>
                     </td>
                 </tr>
