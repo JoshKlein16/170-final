@@ -3,7 +3,7 @@ from sqlalchemy import create_engine, text
 
 app = Flask(__name__)
 
-conn_str = "mysql://root:CSET@localhost/manage_banking"
+conn_str = "mysql://root:jedi4890@localhost/manage_banking"
 engine = create_engine(conn_str, echo=True)
 conn = engine.connect()
 
@@ -92,32 +92,40 @@ def ViewAccount():
 
     return render_template('ViewAccount.html', AccountData=accountInfo)
 
+@app.route('/transfer.html', methods=["GET"])
+def transfer():
+    return render_template('transfer.html')
 
+@app.route('/transfer', methods=["POST"])
+def transfer_money():
+    recipient_account_id = request.form['recipient_account_id']
+    amount = float(request.form['amount'])
 
+    recipient_query = text("SELECT * FROM users WHERE bank_account_id = :recipient_account_id")
+    recipient = conn.execute(recipient_query, {'recipient_account_id': recipient_account_id}).fetchone()
 
+    if recipient:
+        global BankID
+        BankID = recipient[0]
+        user_query = text("SELECT balance FROM users WHERE bank_account_id = :user_account_id")
+        user_balance = conn.execute(user_query, {'user_account_id': BankID}).fetchone()[0]
 
+        if user_balance >= amount:
+            new_user_balance = user_balance - amount
 
+            update_user_query = text("UPDATE users SET balance = :new_balance WHERE bank_account_id = :user_account_id")
+            conn.execute(update_user_query, {'new_balance': new_user_balance, 'user_account_id': BankID})
 
+            new_recipient_balance = recipient[1] + amount
 
+            update_recipient_query = text("UPDATE users SET balance = :new_balance WHERE bank_account_id = :recipient_account_id")
+            conn.execute(update_recipient_query, {'new_balance': new_recipient_balance, 'recipient_account_id': recipient_account_id})
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            return "Money transferred successfully."
+        else:
+            return "Insufficient balance."
+    else:
+        return "Recipient account not found."
 
 
 if __name__ == '__main__':
