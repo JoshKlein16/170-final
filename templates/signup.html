@@ -1,0 +1,12 @@
+{% extends "base.html"%}
+{% block body %}
+    <form action="/signup.html" method="POST">
+        <input type="text" name="First_Name" placeholder="First Name" required>
+        <input type="text" name="Last_Name" placeholder="Last Name" required>
+        <input type="text" name="Email" placeholder="E-mail" required>
+        <input type="password" name="Password" placeholder="Password" required>
+        <input type="int" name="SSN" placeholder="SSN" required>
+        <input type="text" name="Address" placeholder="Address" required>
+        <input type="submit" value="REQUEST ACCESS">
+    </form>
+{% endblock %}
