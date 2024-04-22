@@ -91,7 +91,7 @@ def ViewAccount():
     accountInfo = conn.execute(query, {'Cuser_ID': BankID}).fetchone()
 
     return render_template('ViewAccount.html', AccountData=accountInfo)
-
+    
 
 
 
