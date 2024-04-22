@@ -154,11 +154,9 @@ def add_money():
             print("Amount:", amount)
             print("New balance:", new_balance)
 
-            # Update balance in the database
             update_query = text("UPDATE users SET balance = :new_balance WHERE bank_account_id = :user_id")
             conn.execute(update_query, {'new_balance': new_balance, 'user_id': user_id})
 
-            # Commit the transaction
             conn.commit()
 
             updated_user = conn.execute(user_query, {'user_id': user_id}).fetchone()
@@ -168,7 +166,6 @@ def add_money():
         else:
             return "User not found."
     except Exception as e:
-        # Log any errors
         print("Error:", e)
         return "An error occurred. Please try again later."
 if __name__ == '__main__':
