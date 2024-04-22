@@ -1,10 +1,4 @@
 
-#rightpanel {
-    background-color: red;
-    float: right;
-    width: 400px;
-    height: 100%;
-}
 body{
     background-color: #8d1e4514;
 }
@@ -57,8 +51,7 @@ table th{
     border: 1px solid black;
 }
 table td{
-    border: 1px solid black;
-    width: 100%;
+    border: 1px solid black;  
 
 }
 
@@ -162,4 +155,10 @@ table td{
 #backtohome h2{
     color: whites;
     text-decoration: none;
+}
+
+.viewer td{
+  margin-left: 60px;
+  background-color: #6a1633;
+
 }

@@ -7,6 +7,7 @@
 </head>
 <body>
     {% block body %}
+    <div class="viewer">
     <table>
         <thead>
             <tr>
@@ -17,7 +18,7 @@
                 <th>Password</th>
                 <th>Phone Number</th>
                 <th>SSN</th>
-                <th>Checkings:</th>
+                <th>Balance</th>
                 
                 <th id="rightpanel">SSN</th>
             </tr>
@@ -33,11 +34,16 @@
                 <td>{{ AccountData[5] }}</td>
                 <td>{{ AccountData[6] }}</td>
                 <td>{{ AccountData[7] }}</td>
+
+            {% endfor %}
+            {% for row in balance %}
+            <td>{{ balance[0] }}</td>
             </tr>
-            
+
             {% endfor %}
         </tbody>
     </table>
     {% endblock %}
+    </div>
 </body>
 </html>

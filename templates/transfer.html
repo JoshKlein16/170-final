@@ -1,43 +1,29 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/style.css">
+
     <title>Money Transfer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     {% block body %}
-    <h1>Money Transfer</h1>
-    <form action="/transfer" method="post">
-        <label for="recipient_account_id">Recipient's Bank Account Number:</label><br>
-        <input type="text" id="recipient_account_id" name="recipient_account_id" required><br>
-        <label for="amount">Amount to Transfer:</label><br>
-        <input type="number" id="amount" name="amount" min="0" required><br><br>
-        <input type="submit" value="Transfer">
-    </form>
+    <div class="createaccountform">
+        <h1>Money Transfer</h1>
+        <form action="/transfer" method="post">
+            <label for="recipient_account_id">Recipient's Bank Account Number:</label><br>
+            <input type="text" id="recipient_account_id" name="recipient_account_id" required><br>
+            <label for="amount">Amount to Transfer:</label><br>
+            <input type="number" id="amount" name="amount" min="0" required><br><br>
+            <input type="submit" value="Transfer">
+        </form>
+    </div>
     {% endblock %}
 </body>
+</body>
+
 </html>
-=======
-{% extends "base.html"%}
-{% block body %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Transfer Money</title>
-</head>
-<body>
-    <h1>Transfer Money</h1>
-    <form action="/transfer" method="post">
-        <label for="sender_account_number">Sender Account Number:</label>
-        <input type="number" name="sender_account_number" id="sender_account_number" required><br>
-        <label for="receiver_account_number">Receiver Account Number:</label>
-        <input type="number" name="receiver_account_number" id="receiver_account_number" required><br>
-        <label for="amount">Amount:</label>
-        <input type="number" step="0.01" name="amount" id="amount" required><br>
-        <button type="submit">Transfer Money</button>
-    </form>
-{% endblock %}
->>>>>>> 7ae74c0ac232f772cb970b6881426ad2336e6240
+<body id="accountback">
+        

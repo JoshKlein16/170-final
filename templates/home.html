@@ -1,16 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <a href="/ViewAccount.html">View Account</a>
-    <a href="/transfer.html">transfer Money</a>
-    <a href="/add_money.html">Add Money</a>
-    {% extends "base.html"%}
-    {% block body %}
-    {% endblock %}
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../static/style.css">
+    
+        <title>Document</title>
+    </head>
+        <p id="backtohome"><a href="/index.html">
+            Back to Homepage
+            </a>
+        </p>
+    <body id="accountback">
+        
+        {% block body %}
+        <div class="createaccountform">
+            <center>
+            <h2>
+            <br>
+            <a href="/ViewAccount.html">View Account</a>
+            <br>
+            <a href="/transfer.html">Transfer Money</a>
+            <br>
+            <a href="/add_money.html">Add Money</a>
+            <br>
+            </h2>
+            </center>
+        </div>
+        {% endblock %}
+    
 </html>

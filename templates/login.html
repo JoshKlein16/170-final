@@ -1,19 +1,33 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {% block body %}
-    <form action="/login.html" method="POST">
-        <input type="text" name="Email" placeholder="E-mail" required>
-        <input type="password" name="Password" placeholder="Password" required>
-        <input type="submit" value="LOGIN">
-    </form>
-{% endblock %}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../static/style.css">
+    
+        <title>Document</title>
+    </head>
+        <p id="backtohome"><a href="/index.html">
+            Back to Homepage
+            </a>
+        </p>
+    <body id="accountback">
+        
+        {% block body %}
+        <div class="createaccountform">
+            <form action="/login.html" method="POST">
+                <label for="Email">Enter your email:</label>
+                <br>
+                <input type="text" name="Email" placeholder="E-mail" required>
+                <br>
+                <label for="fName">Enter your password:</label>
+                <br>
+                <input type="password" name="Password" placeholder="Password" required>
+                <input type="submit" value="LOGIN">
+            </form>
+        </div>
+        {% endblock %}
 </body>
 </html>
 
