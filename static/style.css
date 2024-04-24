@@ -1,9 +1,66 @@
-#rightpanel {
+
+
+
+table th{
+    border: 1px solid black;
+}
+table td{
+    border: 1px solid black;
+
+
+}#rightpanel {
     background-color: red;
     float: right;
     width: 400px;
     height: 100%;
 }
+body{
+    background-color: #8d1e4514;
+}
+
+header{
+    width: 100%;
+    background-color: #8D1E44;
+    border-bottom: 2px solid black;
+    font-size: 20px;
+    display:flex;
+    flex-direction:row;
+    justify-content:space-evenly;
+    
+  }
+
+  .main-nav {
+    padding: 5px;
+    text-align: center;
+    font-size: 1.1em;
+    background-color: #8D1E44;
+    display: inline-block;
+    font-weight: lighter;
+  }
+  .main-nav a {
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    padding-left: 20px;
+    border-bottom: 1px solid rgb(0, 0, 0);
+    display: inline-block;
+  }
+  
+  .main-nav p{
+    color: white;
+  }
+  
+  .barImage {
+    padding-right: 700px
+  }
+  
+  .main-nav a:hover {
+    background-color: #671532
+  }
+  
+  .main-nav img {
+    float: left;
+  }
 
 table th{
     border: 1px solid black;
@@ -12,4 +69,108 @@ table td{
     border: 1px solid black;
     width: 100%;
 
+}
+
+.homeCreateAccount{
+    margin-top: 50px;
+    padding-top: 30px;
+    background-position: center;
+    background-image: linear-gradient(rgba(204, 204, 204, 0.7),rgba(204, 204, 204, 0.7)), url(../static/frontpage.png);
+    background-size:80%;
+    height: 400px;
+    width: 100%;
+    background-attachment:fixed;
+    background-repeat: no-repeat;
+  }
+  .homeCreateAccount p{
+  text-align: center;
+  color: white;
+  font-size: 20px;
+
+  }
+  .homeCreateAccount P:nth-child(2){
+  text-align: center;
+  color: white;
+  font-size: 15px;
+
+  }
+  .registeraccount {
+    background-color: rgba(117, 116, 116, 0.845);
+    width: 270px;
+    height: 350px;
+    border-radius: 10%;
+    padding: 5px;
+  }
+  .registeraccount{
+    margin-right: 60%;
+  }
+
+.createAccountSend {
+
+    background-color: #8D1E44;
+    width: 200px;
+    height: 60px;
+    border: 1px solid black;
+    border-radius: 15%;
+}
+
+.createAccountSend:hover{
+    background-color: #6a1633;
+}
+
+.createAccountSend a{
+    color: white;
+    text-decoration: none;
+}
+.loginSend {
+    margin: 30px;
+    background-color: #8D1E44;
+    width: 200px;
+    height: 60px;
+    border: 1px solid black;
+    border-radius: 15%;
+}
+
+.loginSend:hover{
+    background-color: #6a1633;
+}
+
+.loginSend a{
+    color: white;
+    text-decoration: none;
+}
+
+.createaccountform {
+    margin: auto;
+    background-color: whitesmoke;
+    text-align: left;
+    height: 60%;
+    width: 500px;
+    border: 1px solid black;
+    border-radius: 15%;
+    padding-top: 50px;
+    padding-left: 100px;
+}
+
+.createaccountform input {
+    margin: 10px;
+    width: 300px;
+}
+#accountback {
+    background-image: linear-gradient(rgba(204, 204, 204, 0.7),rgba(204, 204, 204, 0.7)), url(../static/frontpage.png);
+}
+
+#backtohome {
+    height: 30px;
+    width: 200px;
+    background-color: #8d1e4583;
+    border: 1px solid black;
+    border-radius: 15%;
+}
+
+#backtohome p{
+    text-align: center;
+    margin-top: 10px;
+    color: whites;
+    text-decoration: none;
 }
