@@ -5,6 +5,7 @@ from decimal import Decimal
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
+
 conn_str = "mysql://root:jedi4890@localhost/manage_banking"
 engine = create_engine(conn_str, echo=True)
 conn = engine.connect()
@@ -134,6 +135,22 @@ def ViewAccount():
 
     return render_template('ViewAccount.html', AccountData=accountInfo)
     
+
+@app.route('/add-money', methods=['POST'])
+def add_money():
+    card_number = request.form['cardNumber']
+    expiration_date = request.form['expirationDate']
+    cvv = request.form['cvv']
+    amount = request.form['amount']
+
+
+    with engine.connect() as connection:
+        result = connection.execute(text("""UPDATE users SET balance = balance + :amount WHERE card_number = :card_number"""), {'amount': amount, 'card_number': card_number})
+
+    if result.rowcount > 0:
+        return render_template('add_money.html', success=True)
+
+    return render_template('add_money.html', success=False)
 
 
 @app.route('/transfer.html', methods=["GET"])
