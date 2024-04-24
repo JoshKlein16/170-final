@@ -23,22 +23,62 @@ def signupT():
 
 @app.route('/createA.html', methods=["POST"])
 def createArequest():
-    conn.execute(text("INSERT INTO request_Cuser (First_Name, Last_Name, Email, Password, Phone_Number, SSN, checking) VALUES (:fName, :lName, :email, :password, :phone, :ssn, '0')"),  request.form)
-    conn.commit()
-    return render_template("index.html")
+    form_data = request.form
+    ssn = form_data['ssn']
+
+    existing_user = conn.execute(
+        text("SELECT * FROM Cuser WHERE SSN = :ssn"),
+        {'ssn': ssn}
+    ).fetchone()
+
+    if existing_user:
+        return render_template('createA.html', error="SSN already exists. Please enter a different SSN.")
+    else:
+        conn.execute(
+            text("INSERT INTO request_Cuser (First_Name, Last_Name, Email, Password, Phone_Number, SSN) "
+                 "VALUES (:fName, :lName, :email, :password, :phone, :ssn)"),
+            form_data
+        )
+        conn.commit()
+        return render_template("index.html")
+
 
 @app.route('/home.html')
 def student():
     return render_template('index.html')
 
-
-
 @app.route('/pendingAccounts.html')
 def accounts():
-    query = text("SELECT Cuser_ID, First_Name, Last_Name, Email, Phone_Number, SSN FROM request_Cuser")
+    query = text("SELECT Cuser_ID, First_Name, Last_Name, Email, Password, Phone_Number, SSN FROM request_Cuser")
     CuserData = conn.execute(query)
 
     return render_template('pendingAccounts.html', CuserData=CuserData)
+
+@app.route('/pendingAccounts.html', methods=['POST'])
+def accept_user():
+    ssn = request.form.get('ssnverification')
+    if not ssn:
+        return render_template('pendingAccounts.html', error="SSN verification is required.")
+
+    try:
+        query1 = text("SELECT * FROM request_Cuser WHERE SSN = :ssn")
+        user = conn.execute(query1, {'ssn' : ssn}).fetchone()
+
+        if user:
+            query2 = text("INSERT INTO Cuser (First_Name, Last_Name, Email, Password, Phone_Number, SSN) VALUES (:First_Name, :Last_Name, :Email, :Password, :Phone_Number, :SSN)")
+            conn.execute(query2, {'First_Name': user[1], 'Last_Name': user[2], 'Email': user[3], 'Password': user[4], 'Phone_Number': user[5], 'SSN': user[6]})
+            
+            query3 = text("INSERT INTO users (balance) VALUES (0)")
+            conn.execute(query3)
+            
+            query4 = text("DELETE FROM request_Cuser WHERE SSN = :ssn")
+            conn.execute(query4, {'ssn': ssn})
+
+            return render_template('index.html', message="User accepted successfully.")
+        else:
+            return render_template('pendingAccounts.html', error="Invalid SSN.")
+    except Exception as e:
+        return render_template('pendingAccounts.html', error="An error occurred while processing your request.")
 
 
 
@@ -56,7 +96,7 @@ def loginSGo():
     if user:
         global BankID
         BankID = user[0]
-        query = text("SELECT First_Name, FROM banker WHERE Cuser_ID = :Cuser_ID")
+        query = text("SELECT First_Name FROM banker WHERE Cuser_ID = :Cuser_ID")
         name = conn.execute(query, {'Cuser_ID' : BankID}).fetchone()
         return render_template('adminpanel.html', name=name[0])
     else:
@@ -73,23 +113,34 @@ def loginGo():
     query = text("SELECT Cuser_ID FROM Cuser WHERE Email = :email AND Password = :password")
     user = conn.execute(query, {'email': email, 'password': password}).fetchone()
     if user:
-        session['user_id'] = user[0]
-        return render_template('home.html')
+        global BankID
+        BankID = user[0]
+        query = text("SELECT First_Name FROM Cuser WHERE Cuser_ID = :Cuser_ID")
+        name = conn.execute(query, {'Cuser_ID': BankID}).fetchone()
+
+        if name:
+            return render_template('home.html', name=name[0])
+        else:
+            return render_template('index.html', name="WHO DF ARE YOU")
     else:
         return render_template('index.html')
+    
 
 @app.route('/ViewAccount.html')
 def ViewAccount():
-    query = text("SELECT First_Name, Last_Name, Email, Password, Phone_Number, SSN, checking FROM Cuser WHERE Cuser_ID = :Cuser_ID")
+    query = text("SELECT Cuser_ID, First_Name, Last_Name, Email, Password, Phone_Number, SSN FROM Cuser WHERE Cuser_ID = :Cuser_ID")
+    balance = text("select balance from users where bank_account_id = :cuser_ID")
     accountInfo = conn.execute(query, {'Cuser_ID': BankID}).fetchone()
 
     return render_template('ViewAccount.html', AccountData=accountInfo)
+    
+
 
 @app.route('/transfer.html', methods=["GET"])
 def transfer():
     return render_template('transfer.html')
 
-@app.route('/transfer', methods=["POST"])
+@app.route('/transfer.html', methods=["POST"])
 def transfer_money():
     if 'user_id' not in session:
         return "User not logged in"
@@ -103,13 +154,13 @@ def transfer_money():
         recipient = conn.execute(recipient_query, {'recipient_account_id': recipient_account_id}).fetchone()
 
         if recipient:
-            user_query = text("SELECT balance FROM users WHERE bank_account_id = :user_account_id")
-            user_balance = Decimal(conn.execute(user_query, {'user_account_id': sender_account_id}).fetchone()[0])
+            sender_query = text("SELECT balance FROM users WHERE bank_account_id = :sender_account_id")
+            sender_balance = Decimal(conn.execute(sender_query, {'sender_account_id': sender_account_id}).fetchone()[0])
 
-            if user_balance >= amount:
-                new_user_balance = user_balance - amount
-                update_user_query = text("UPDATE users SET balance = :new_balance WHERE bank_account_id = :user_account_id")
-                conn.execute(update_user_query, {'new_balance': new_user_balance, 'user_account_id': sender_account_id})
+            if sender_balance >= amount:
+                new_sender_balance = sender_balance - amount
+                update_sender_query = text("UPDATE users SET balance = :new_balance WHERE bank_account_id = :sender_account_id")
+                conn.execute(update_sender_query, {'new_balance': new_sender_balance, 'sender_account_id': sender_account_id})
 
                 new_recipient_balance = recipient[1] + amount
                 update_recipient_query = text("UPDATE users SET balance = :new_balance WHERE bank_account_id = :recipient_account_id")

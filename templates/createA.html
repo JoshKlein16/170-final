@@ -1,19 +1,25 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/style.css">
+
     <title>Document</title>
 </head>
-<body>
-    Hi
+    <p id="backtohome"><a href="/index.html">
+        Back to Homepage
+        </a>
+    </p>
+<body id="accountback">
+    
     {% block body %}
+    <div class="createaccountform">
     <form name="request" action="/createA.html" method="POST">
         <label for="fName">Enter your First Name:</label>
         <input type="text" name="fName" placeholder="First Name" required>
         <br>
-        <label for="lName">Enter your First Name:</label>
+        <label for="lName">Enter your Last Name:</label>
         <input type="text" name="lName" placeholder="Last Name" required>
         <br>
         <label for="email">Enter your email:</label>
@@ -21,6 +27,7 @@
         <br>
         <label for="phone">Enter your phone number:</label>
         <input type="number" name="phone" placeholder="Phone Number" required>
+        <br>
         <label for="ssn">Enter your SSN:</label>
         <input type="number" name="ssn" placeholder="Social Security Number:">
         <br>
@@ -29,6 +36,7 @@
         <br>
         <input type="submit" value="CREATE ACCOUNT"  onclick="alert('Account Submitted!')">
     </form>
+    </div>
     {% endblock %}
 </body>
 </html>

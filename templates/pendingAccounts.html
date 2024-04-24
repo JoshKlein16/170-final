@@ -19,7 +19,6 @@
                 <th>Password</th>
                 <th>Phone Number</th>
                 <th>SSN</th>
-                <th id="rightpanel">SSN</th>
             </tr>
         </thead>
         <tbody>
@@ -32,7 +31,8 @@
                     <td>{{ row[4] }}</td>
                     <td>{{ row[5] }}</td>
                     <td>{{ row[6] }}</td>
-                    <td>{{ row 7=""></row> }}</td>
+
+
                 </tr>
             {% endfor %}
         </tbody>
@@ -40,7 +40,8 @@
     <form action="/pendingAccounts.html" method="POST">
         <label for="ssnverification">Enter SSN:</label>
         <input type="text" name="ssnverification" placeholder="SSN" required>
-        <input type="submit" value="acceptA">
+        <input type="submit" value="Accept User">
+    </form>
     {% endblock %}
 </body>
 </html>
